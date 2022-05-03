@@ -1,6 +1,7 @@
 import { Group } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import MODEL from './land.gltf';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import MODEL from './Pine_Tree_Tall_Bent.glb';
 
 class Land extends Group {
     constructor() {
@@ -8,12 +9,17 @@ class Land extends Group {
         super();
 
         const loader = new GLTFLoader();
+        // const fbxLoader = new FBXLoader();
+
 
         this.name = 'land';
 
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
         });
+        // fbxLoader.load(MODEL, (object)=>{
+        //     this.add(object)
+        // });
     }
 }
 
