@@ -8,7 +8,7 @@ class Land extends Group {
         // Call parent Group() constructor
         super();
 
-        this.yPos = -20;
+        this.yPos = -15;
         this.movementSpeed = 0.075;
 
         const loader = new GLTFLoader();
@@ -20,13 +20,15 @@ class Land extends Group {
         loader.load(MODEL, (gltf) => {
             this.add(gltf.scene);
         });
+
+        // this.add(gltf.scene);
         // fbxLoader.load(MODEL, (object)=>{
         //     this.add(object)
         // });
         this.position.y = this.yPos;
-        this.position.z = -5;
+        this.position.z = -50;
         this.position.x = 0;
-        this.scale.x = this.scale.y = this.scale.z = 2.5;
+        this.scale.x = this.scale.y = this.scale.z = 0.5;
         this.rotation.y += Math.PI / 2;
         this.rotation.x -= Math.PI / 10;
         this.rotation.z += Math.PI / 10;
