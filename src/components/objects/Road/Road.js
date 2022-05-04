@@ -2,6 +2,7 @@ import { Group, Vector3 } from "three";
 import Block from "../Block/Block";
 import Coin from "../Coin/Coin";
 import { InitBlock } from "../InitBlock";
+import Land from "../Land/Land";
 
 class Road extends Group {
   constructor(parent) {
@@ -19,6 +20,8 @@ class Road extends Group {
       cameraPosition: parent.camera.position,
       time: 0,
       lastBlock: 0,
+      lastLand: 0,
+      landRemoved: false,
       blockPos: new Vector3(0, 0, -5),
       direction: 1,
       justJumped: false,
@@ -28,6 +31,8 @@ class Road extends Group {
     this.blockCollisions = [];
     this.coins = [];
     this.coinCollisions = [];
+    this.lands = [];
+    this.addlands = [];
 
     // Add self to parent's update list
     parent.addToUpdateList(this);
@@ -36,6 +41,12 @@ class Road extends Group {
     const initBlock = new InitBlock(this);
     this.initBlock = initBlock;
     this.add(initBlock);
+
+    //add land to the starting scene
+    const land = new Land(this);
+    this.addlands.push(land);
+    this.lands.push(land);
+    this.add(land);
 
     // adding to the collision array
     this.blockCollisions = [...this.blockCollisions, this.initBlock.bb];
@@ -87,6 +98,14 @@ class Road extends Group {
     }
   }
 
+  addLand(){
+    // //adding new land
+    const land = new Land(this);
+    // this.addlands.push(land);
+    this.lands.push(land);
+    this.add(land);
+  }
+
   // temporary function
   random() {
     return Math.floor(Math.random() * 10) + 1;
@@ -106,6 +125,29 @@ class Road extends Group {
         block.updatePosition();
       }
     }
+
+    for (let i = 0; i < this.lands.length; i++) {
+      const curland = this.lands[i];
+    //   if (curland.position.z > this.state.cameraPosition.z){
+    //     this.state.landRemoved = true;
+    //   }
+
+    //   if (curland.position.z > this.state.cameraPosition.z + 10) {
+    //     // removing offscreen block
+    //     this.lands.shift();
+    //     this.remove(curland);
+    //     // this.state.landRemoved = true;
+    //   } else {
+        curland.updatePosition();
+    //   }
+    }
+
+    // //naive move land
+    // if(this.land.position.z > this.state.cameraPosition.z+10){
+    //   this.remove(this.land);
+    // } else {
+    //   this.land.updatePosition();
+    // }
 
     for (let i = 0; i < this.coins.length; i++) {
       const coin = this.coins[i];
@@ -140,7 +182,14 @@ class Road extends Group {
 
     if (this.state.time - this.state.lastBlock > this.timeDiff) {
       this.addBlock();
+      
       this.state.lastBlock = this.state.time;
+    }
+
+    if (this.state.time - this.state.lastLand > this.timeDiff * 15){
+      // this.state.landRemoved = false;
+      this.addLand();
+      this.state.lastLand = this.state.time;
     }
 
     // handle the initial block
