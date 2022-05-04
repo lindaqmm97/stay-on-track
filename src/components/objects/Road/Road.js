@@ -43,10 +43,15 @@ class Road extends Group {
     this.add(initBlock);
 
     //add land to the starting scene
-    const land = new Land(this);
+    const land = new Land(this, -30);
     this.addlands.push(land);
     this.lands.push(land);
     this.add(land);
+
+    const land2 = new Land(this, -200);
+    this.addlands.push(land2);
+    this.lands.push(land2);
+    this.add(land2);
 
     // adding to the collision array
     this.blockCollisions = [...this.blockCollisions, this.initBlock.bb];
@@ -99,11 +104,11 @@ class Road extends Group {
   }
 
   addLand(){
-    // //adding new land
-    const land = new Land(this);
-    // this.addlands.push(land);
-    this.lands.push(land);
-    this.add(land);
+    // // //adding new land
+    // const land = new Land(this);
+    // // this.addlands.push(land);
+    // this.lands.push(land);
+    // this.add(land);
   }
 
   // temporary function
@@ -127,19 +132,21 @@ class Road extends Group {
     }
 
     for (let i = 0; i < this.lands.length; i++) {
+      console.log(this.lands.length);
       const curland = this.lands[i];
     //   if (curland.position.z > this.state.cameraPosition.z){
     //     this.state.landRemoved = true;
     //   }
 
-    //   if (curland.position.z > this.state.cameraPosition.z + 10) {
-    //     // removing offscreen block
-    //     this.lands.shift();
-    //     this.remove(curland);
-    //     // this.state.landRemoved = true;
-    //   } else {
+      if (curland.position.z > this.state.cameraPosition.z + 70) {
+        // removing offscreen block
+        // this.lands.shift();
+        // this.remove(curland);
+        // this.state.landRemoved = true;
+        curland.position.z = this.state.cameraPosition.z-270;
+      } else {
         curland.updatePosition();
-    //   }
+      }
     }
 
     // //naive move land
@@ -186,7 +193,7 @@ class Road extends Group {
       this.state.lastBlock = this.state.time;
     }
 
-    if (this.state.time - this.state.lastLand > this.timeDiff * 15){
+    if (this.state.time - this.state.lastLand > this.timeDiff * 100){
       // this.state.landRemoved = false;
       this.addLand();
       this.state.lastLand = this.state.time;
